@@ -8,6 +8,18 @@ This repository shows my daily progress, with each day dedicated to a separate b
 git checkout Day1
 ```
 
+# Table of Contents
+
+<details>
+  <summary>Click to expand!</summary>
+
+- [Day 1: Learning Flask](#day-1-learning-flask)
+    - [Building a Simple Flask App](#building-a-simple-flask-app)
+    - [Features and Demo](#features-and-demo)
+
+</details>
+<br>
+
 # Day 1: Learning Flask
 
 The first step in building a website is selecting a web framework that aligns with your goals. I chose **Flask**, a lightweight and beginner-friendly Python framework, making it ideal for small to medium-sized projects. While more complex frameworks like Django are better suited for large-scale applications, Flask offers simplicity and flexibility, making it a great choice for beginners.
