@@ -11,7 +11,17 @@ from flask_login import LoginManager # Manage the login process
 # It converts the tables in the database to Python objects, abstract the syntax of SQL queries
 # SQLAlchemy can work with different databases, such as SQLite (default), MySQL, PostgreSQL, etc. 
 db = SQLAlchemy()
-DB_NAME = 'database.db' 
+DB_PATH_IN_DOCKER= '/app/instance/database.db'  # Path for Docker volume (See this path in the docker-compose.yml file, volumes section)
+# But why this PATH? -> This is the DEFAULT BEHAVIOR of Flask, it creates an `instance`` folder at the root of your application
+# This is where Flask stores instance-specific data like SQLite databases, config files, etc. This allows you to keep configuration 
+# and data that should not be in version control separate from your main application code.
+
+# Set the database name to the volume path if running in Docker, otherwise (running locally) use the default path
+DB_NAME = DB_PATH_IN_DOCKER if os.getenv('DOCKER_ENV') else 'database.db' 
+
+# So the PATH will be:
+# - If running in Docker: /app/instance/database.db
+# - If running locally: ./instance/database.db (In localy, just give the databse name, Flask will create the instance folder and handle the path automatically)
 
 def create_app():
     app = Flask(__name__)

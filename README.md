@@ -123,6 +123,49 @@ page routes like /home, while `auth.py` manages authentication routes (/login, /
 4. **Logout**: Users can log out of their account, which redirects them to the login page.
 
 
+# Day 2: Deploying with Docker
+
+## Setup Database path
+
+Today, I learned how to deploy a Flask application using Docker. Docker is a platform that allows you to package your application and its dependencies into a container, ensuring that it runs consistently across different environments. This makes it easy to deploy your application to any server without worrying about compatibility issues.
+
+I watch some of these tutorials to understand the basics concepts and commands of Docker: [Docker theory](https://youtu.be/pg19Z8LL06w?si=Z5aPc8_v5rSXMMyG), [Docker compose](https://youtu.be/pg19Z8LL06w?si=Z5aPc8_v5rSXMMyG), [Dokcer commands](https://www.youtube.com/watch?v=B5wf8p1oezA)
+
+First, I need to change database path in the source code to make it work with Docker. 
+
+```python
+DB_PATH_IN_DOCKER= '/app/instance/database.db'  # Path for Docker volume (See this in the docker-compose.yml file, volumes section)
+DB_NAME = DB_PATH_IN_DOCKER if os.getenv('DOCKER_ENV') else 'database.db' 
+```
+So PATH of the database will dynamically change based on the environment variable `DOCKER_ENV`:
+ - If running in Docker: /app/instance/database.db
+ - If running locally: ./instance/database.db (In localy, just give the databse name, Flask will create the instance folder and handle the path automatically)
+
+For a simple database like SQLite, which is lightweight and file-based (meaning it stores data in a single file, no server required), we can set it up inside the website container itself. For a more complex database like MySQL that run as a separate server, we need set up a separate container for the database and connect it to the website container. 
+
+## Dockerfile
+
+Next, I created a `Dockerfile` to build the Docker image. The Dockerfile contains instructions to build the image, such as installing dependencies, copying files, and setting environment variables. See the Dockerfile [here](/Dockerfile)
+
+You can test if the Dockerfile works by building the image and running the container:
+
+```bash
+docker build -t flask-website .
+docker run -p 5000:5000 flask-website
+```
+
+## Docker Compose
+
+Then, I created a `docker-compose.yml` file to define the services needed to run the application. The `docker-compose.yml` file specifies the image to use, environment variables, ports binding, and volumes to mount. In this case, we only have one service, the Flask website (the SQLitedatabase will be set up inside the website container) and the database is stored in a volume to persist data between container restarts. See the docker-compose.yml file [here](/docker-compose.yml).
+
+To build and run the application using Docker Compose:
+
+```bash
+docker compose up --build
+```
+
+After that, the website should be accessible at `http://127.0.0.1:5000`.
+
 
 
 

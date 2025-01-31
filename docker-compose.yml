@@ -1,0 +1,33 @@
+services:
+  website:
+    container_name: flask-website
+    build: . # Build the image from the Dockerfile in the current directory
+    ports:   # Map the container port to the host port
+      - "5000:5000"
+    volumes:
+      # - .:/app # For development only: live code updates
+      - sqlite_data:/app/instance # Web app needs to access DB file, so mount the database volume
+    environment:
+    # Set environment variables
+    # FLASK_APP: Tells Flask where the entry point of the application is
+    # FLASK_ENV: Tells Flask to run in development mode, which enables debug mode and reloader
+      - FLASK_APP=main.py
+      - FLASK_ENV=development
+      - DOCKER_ENV=true  # Flag to indicate the app is running in a Docker container so
+      # Flask website can use corresponding database path
+    networks:
+      - flask_net
+
+volumes:
+  # Create a named volume to persist the SQLite database
+  sqlite_data:
+
+networks:
+  flask_net:
+
+# When runnig the docker compose file, we will see two IP addresses
+#- http://localhost:5000 : Access from host machine
+
+#- http://172.18.0.2:5000:  Access from another container in the same network, since we defined a custom flask_net network.
+# This is internal IP address address assigned by Docker to the container.
+
