@@ -91,7 +91,7 @@ the basic structure of the website, looks something like this:
 
 4. The `static` folder is empty because we do not need custom CSS or JS frameworks. We already include the Bootstrap framework in `base.html`, which handles CSS and animations for us.
 
-5. `main.py`: Run this file to start our website. Access the website at ` http://127.0.0.1:5000`
+5. `main.py`: Run this file will trigger `__init__.py` to start our website. Access the website at ` http://127.0.0.1:5000`
 
 
 **The workflow of the website is as follows:**
