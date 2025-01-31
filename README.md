@@ -61,15 +61,19 @@ Now you can start coding your Flask app. In case of mine:
 1. Start from `__init__.py`, I set up the Flask app, configures `SECRET_KEY`, database settings, register routes (URLs) and initializes extensions like LoginManager.
 
 2. The `routes.py` and `auths.py` defined all possible URLs that user can visit, then render UI, handle logical for these URLs (`routes.py` handles general 
-page routes like the home page, while `auth.py` manages authentication routes (/login, /register, /logout)). Each URL renders the corresponding HTML 
-file and processes user input from these HTML forms. The HTML files are located in the `templates` folder and inherit from `base.html`. The `base.html` file forms 
-the basic structure of the website, looks something like this:
+page routes like /home, while `auth.py` manages authentication routes (/login, /register, /logout)). 
+
+    Each URL renders the corresponding HTML file and processes user input. Flask uses **Jinja2** templating to render HTML files, allowing us to embed Python code within html file. Jinja2 supports embedding variables (e.g., `{{ variable }}`), control structures like loops and conditionals (e.g.,`{% if %}`), and template inheritance (e.g.,`{% extends "base.html" %}`).
+
+    The HTML files are located in the `templates` folder and inherit from `base.html`. The `base.html` file forms the basic structure of the website, which looks something like this:
+
 
     ![BaseHTML](assets/baseHTML.png)
 
     *Include the navigation bar (A collapsible navbar with item: home, login, register, logout), flask message area and a content block.*
 
-    All other HTML files will inherit from `base.html`, keep the navigation bar and message area, but override the content block with their own content. The `base.html` also contains the currently logged-in `user` object, which is centralized so that every HTML file can access it. This object will be provided by the register or login HTML file when the form is submitted.
+    All other HTML files will inherit from `base.html`, keep the navigation bar and message area, but override the content block with their own content. The `base.html` also contains the currently logged-in `user` object, which is centralized so that every HTML file can access it. This object will be provided by the register or login HTML file when the form is submitted. 
+
 
 3. `models.py` is used to define models (from a Python perspective) or table schemas (from a database perspective). In this project, we use two tables: `User` and `Note`. These tables are connected with a foreign key. To convert between python objects and database tables, we use SQLAlchemy. By default, Flask creates an `instance` folder at the root of your application. This folder stores instance-specific data like SQLite databases and config files, keeping configuration and data that should not be in version control separate from your main application code. Here is the database schema:
 
