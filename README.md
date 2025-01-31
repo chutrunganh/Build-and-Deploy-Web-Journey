@@ -175,6 +175,7 @@ docker compose up --build
 
 Once the container is running, the website should be accessible at `http://127.0.0.1:5000`.
 
+![DokcerComposeUp](assets/docker_compose_up.png)
 
 
 
