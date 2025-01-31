@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+<!-- Override the title block -->
+{% block title %}Register{% endblock %}
+
+<!-- Override content block -->
+{% block content %}
+    <h3 align="center">Login</h3>
+    <p align="center">Welcome back!</p>
+    <!-- When submit this form, create a POST request to the server -->
+    <form method="post">
+        <!--Username-->
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" class="form-control" required>
+        </div>
+
+        <!--Password-->
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" class="form-control" required>
+        </div>
+        <!--Submit Button-->
+        <br>
+        <button type="submit" class="btn btn-primary">Sign In</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,97 @@
+<!--This is the base templat for all other html files to herit from, it contains the basic structure of the website
+like the header, footer, navigation bar and the main content of the page. Other html files will onverride parts of this 
+base template to add their own content.-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Base{% endblock %}</title>
+    <!-- Include Bootstrap CSS Framework -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom JS to fade out flash messages after 2 seconds -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all flash messages
+            var alerts = document.getElementsByClassName('alert');
+            
+            // Set timeout for each alert (2000ms = 2 seconds)
+            Array.from(alerts).forEach(function(alert) {
+                setTimeout(function() {
+                    alert.classList.add('fade');
+                    setTimeout(function() {
+                        alert.remove();
+                    }, 300);
+                }, 2000);
+            });
+        });
+    </script>
+
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Flask Demo</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if user.is_authenticated %} 
+                    <!-- If wish to use this `user` varaible, html file inhertance from this base.html must be passed with user=current_user -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('routes.home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auths.logout') }}">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auths.login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auths.register') }}">Register</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                   {% if category == 'error' %}
+                        <div class="alert alert-danger d-flex justify-content-between align-items-center" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% elif category == 'success' %}
+                        <div class="alert alert-success d-flex justify-content-between align-items-center" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info d-flex justify-content-between align-items-center" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content  -->
+    <div class="container">
+        {% block content %}Override this content{% endblock %}
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
